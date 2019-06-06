@@ -10,7 +10,7 @@ npm i
 npm run serve
 ```
 
-###
+### Server
 
 ```sh
 cd server
