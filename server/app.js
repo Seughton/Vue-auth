@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'Welcome to Community API! 🌈 💚'
+    message: 'Welcome to Vue Auth App! 🌈 💚'
   });
 });
 
