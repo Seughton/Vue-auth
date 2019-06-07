@@ -1,20 +1,42 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <div>
-      <button class="signUpButton">
-        Sign Up
-      </button>
-    </div>
+    <!-- <form action="http://localhost:3000/auth/google"> -->
+    <a href="http://localhost:3000/auth/google" class="signUpButton">Sign Up</a>
+    <!-- </form> -->
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  name: 'AuthPage',
+  name: "AuthPage",
   props: {
-    msg: String,
+    msg: String
   },
+  created() {
+    this.fetchUser();
+  },
+  watch: {
+    // 'this.$route'(newVal) {
+    //   console.log(newVal)
+    // }
+  },
+  methods: {
+    fetchUser() {
+      let id = this.$route.hash.slice(1);
+      console.log("ID", id);
+      axios
+        .get(`http://localhost:3000/getUser`, {
+          params: {
+            id
+          }
+        })
+        .then(response => {
+          console.log(response)
+        })
+    }
+  }
 };
 </script>
 
@@ -28,8 +50,8 @@ export default {
   cursor: pointer;
 }
 .signUpButton:hover {
-   background-color: rgba(230, 233, 185,.5);
- }
+  background-color: rgba(230, 233, 185, 0.5);
+}
 h3 {
   margin: 40px 0 0;
 }

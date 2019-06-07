@@ -2,8 +2,39 @@
   "version": 2,
   "name": "vue-authorization-api",
   "builds": [
-    { "src": "bin/www", "use": "@now/static" },
-    { "src": "app.js", "use": "@now/node" }
+    {
+      "src": "bin/www",
+      "use": "@now/static"
+    },
+    {
+      "src": "app.js",
+      "use": "@now/node"
+    },
+    {
+      "src": "middlewares/*.js",
+      "use": "@now/node-server"
+    },
+    {
+      "src": "auth/*.js",
+      "use": "@now/node-server"
+    }
   ],
-  "routes": [{ "src": "/", "dest": "app.js" }]
+  "env": {
+    "GOOGLE_CLIENT_ID":"974341650966-lkjjc6me1stsh6jps5dd9lenh765n6ke.apps.googleusercontent.com",
+    "GOOGLE_CLIENT_SECRET":"lwVBZaJ-USRlNbtfibTZ4wsA"
+  },
+  "routes": [
+    {
+      "src": "/",
+      "dest": "app.js"
+    },
+    {
+      "src": "/auth/google",
+      "dest": "app.js"
+    },
+    {
+      "src": "/auth/google/callback",
+      "dest": "app.js"      
+    }
+  ]
 }
