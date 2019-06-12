@@ -1,9 +1,8 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <!-- <form action="http://localhost:3000/auth/google"> -->
-    <a href="http://localhost:3000/auth/google" class="signUpButton">Sign Up</a>
-    <!-- </form> -->
+    <a v-if='!route' href="http://localhost:3000/auth/google" class="signUpButton">Sign Up</a>
+    <button @click="fetchUser" v-if='route'>GO TO PROFILE</button>
   </div>
 </template>
 
@@ -14,27 +13,41 @@ export default {
   props: {
     msg: String
   },
+  data() {
+    return {
+    };
+  },
+  computed: {
+    route() {
+      return this.$route.hash;
+    },
+    userProfile() {
+      return this.$store.state.userProfile;
+    }
+  },
   created() {
-    this.fetchUser();
   },
   watch: {
-    // 'this.$route'(newVal) {
-    //   console.log(newVal)
-    // }
+    route(newVal) {
+      console.log(newVal);
+    }
   },
   methods: {
     fetchUser() {
-      let id = this.$route.hash.slice(1);
-      console.log("ID", id);
+      let id = this.$route.hash.slice(1);    
       axios
         .get(`http://localhost:3000/getUser`, {
           params: {
             id
           }
         })
-        .then(response => {
-          console.log(response)
-        })
+        .then(response => response.data)
+        .then(data => {
+          console.log('USER',data)
+          this.$store.dispatch("setUser", data);
+          this.$router.push("/profile");
+        });
+      
     }
   }
 };

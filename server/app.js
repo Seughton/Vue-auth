@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-var cors = require('cors')
 require('dotenv').config();
 const passport = require('passport')
 const auth = require('./auth')
@@ -12,7 +11,6 @@ const app = express();
 
 const { notFound, errorHandler } = require('./middlewares');
 
-// app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -28,6 +26,8 @@ app.get('/', async(req, res) => {
 });
 
 app.get('/getUser', async(req,res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
   let id = req.query.id
   let user = await client.query("SELECT * FROM users WHERE id = $1", [id])
   res.send(user.rows[0])
