@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
+import axios from 'axios'
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -8,19 +8,31 @@ export default new Vuex.Store({
     userProfile: null
   },
   mutations: {
-    setUser(state,payload) {
+    setUser(state, payload) {
       state.userProfile = payload
     },
-    logOut(state){
+    logOut(state) {
       state.userProfile = null
     }
   },
   actions: {
     setUser(context, payload) {
-      context.commit('setUser',payload)
+      let id = payload.id
+      axios
+        .get(`${process.env.NODE_ENV === 'development' ? 
+        'http://localhost:3000/getUser' : 
+        'https://vue-authorization-api.seughton.now.sh/getUser'}`,
+          {
+            params: {
+              id
+            }
+          })
+        .then(response => response.data)
+        .then(data => {
+          context.commit('setUser', data)
+        });
     },
-    logOut(context){
-      console.log('LOGOUT')
+    logOut(context) {
       context.commit('logOut')
     }
   },

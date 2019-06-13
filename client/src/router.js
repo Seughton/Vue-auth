@@ -4,6 +4,7 @@ import Home from './views/Home.vue';
 import Profile from './components/Profile.vue'
 
 Vue.use(Router);
+let getUser = localStorage.getItem('user')
 
 export default new Router({
   mode: 'history',
@@ -17,11 +18,25 @@ export default new Router({
       path: '/login',
       name: 'home',
       component: Home,
+      // beforeEnter: (to,from,next) => {
+      //   next()
+      // }
     },
     {
       path: '/profile',
       name: 'profile',
-      component: Profile
+      component: Profile,
+      // beforeEnter: (to,from,next) => {
+      //   if(!getUser) {
+      //     next('/')
+      //   }else {
+      //     next()
+      //   }
+      // }
     },
+    {
+      path: '*',
+      redirect: '/'
+    }
   ],
 });

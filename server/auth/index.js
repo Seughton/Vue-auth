@@ -50,7 +50,7 @@ router.get('/google/callback', (req, res, next) => {
     try {
       console.log('creating token with', user.id); 
       let id = user.id
-      res.redirect(`${process.env.CLIENT_REDIRECT}#${id}`);
+      res.redirect(`${process.env.NODE_ENV === 'development' ? process.env.CLIENT_REDIRECT: 'https://dist.seughton.now.sh'}#${id}`);
     } catch (error) {
       res.redirect(`${process.env.CLIENT_ERROR_REDIRECT}${error.message}`);
     }

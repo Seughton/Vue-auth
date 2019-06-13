@@ -1,8 +1,8 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <a v-if='!route' href="http://localhost:3000/auth/google" class="signUpButton">Sign Up</a>
-    <button @click="fetchUser" v-if='route'>GO TO PROFILE</button>
+    <h1 style="padding-bottom: 20px;">{{ msg }}</h1>
+    <a v-if="!route" :href="envMode==='development' ? this.config.devGoogleURL: this.config.prodGoogleURL" class="signUpButton">Sign Up</a>
+    <button class="profile-button" @click="fetchUser" v-if="route">GO TO PROFILE</button>
   </div>
 </template>
 
@@ -14,8 +14,7 @@ export default {
     msg: String
   },
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     route() {
@@ -23,31 +22,25 @@ export default {
     },
     userProfile() {
       return this.$store.state.userProfile;
+    },
+    envMode () {
+      return process.env.NODE_ENV
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('user')) {
+      this.$router.push("/profile");
     }
   },
   created() {
-  },
-  watch: {
-    route(newVal) {
-      console.log(newVal);
-    }
-  },
+    console.log('process.env.NODE_ENV',process.env.NODE_ENV)
+    },
   methods: {
     fetchUser() {
-      let id = this.$route.hash.slice(1);    
-      axios
-        .get(`http://localhost:3000/getUser`, {
-          params: {
-            id
-          }
-        })
-        .then(response => response.data)
-        .then(data => {
-          console.log('USER',data)
-          this.$store.dispatch("setUser", data);
-          this.$router.push("/profile");
-        });
-      
+      let id = this.$route.hash.slice(1);
+      this.$store.dispatch("setUser", { id })
+      localStorage.setItem("user", this.$route.hash.slice(1));
+      this.$router.push("/profile");        
     }
   }
 };
@@ -56,14 +49,22 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .signUpButton {
-  height: 40px;
-  width: 100px;
+  padding: 20px 100px;
   background: white;
   border: 1px solid rgb(98, 98, 223);
+  color: black;
+  text-decoration: none;
   cursor: pointer;
 }
 .signUpButton:hover {
-  background-color: rgba(230, 233, 185, 0.5);
+  background-color: rgba(129, 76, 15, 0.5);
+}
+.profile-button {
+  width: 200px;
+  height: 40px;
+  background: rgb(99, 61, 61);
+  color: white;
+  border: none
 }
 h3 {
   margin: 40px 0 0;

@@ -35,6 +35,10 @@
     {
       "src": "/auth/google/callback",
       "dest": "app.js"      
+    },
+    {
+      "src": "/getUser",
+      "dest": "app.js"      
     }
   ]
 }
